@@ -1,8 +1,12 @@
 package com.example.crudByJpa.controller;
 
+import com.example.crudByJpa.dto.StudentDto;
+import com.example.crudByJpa.dto.StudentResponseDto;
 import com.example.crudByJpa.model.Student;
 import com.example.crudByJpa.service.StudentService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
 
@@ -18,6 +22,16 @@ public class StudentController {
     @GetMapping("/")
     public List<Student> getStudents(){
         return  service.getSudents();
+    }
+    @GetMapping("/cliRestic/{rno}")
+    public  StudentResponseDto getStudentsRes(@PathVariable int rno){
+        return service.getStudentsResByRoll(rno);
+    }
+
+    @GetMapping("/studentspage")
+    public Page<Student> getALlStuAsPage(@RequestParam("page") int page,
+                                         @RequestParam("size") int size){
+        return service.getAllStuAsPage(page,size);
     }
 
     @GetMapping("/{rno}")
@@ -54,9 +68,14 @@ public class StudentController {
     }
 
 
-    @PostMapping("addstudent")
-    public  String addStudent(@RequestBody Student S){
-        return service.addStudent(S);
+//    @PostMapping("addstudent")
+//    public  String addStudent(@Valid  @RequestBody Student S){
+//        return service.addStudent(S);
+//    }
+
+    @PostMapping("addStu")
+    public StudentDto addStu(@Valid @RequestBody StudentDto std){
+        return service.addStu(std);
     }
 
     @PutMapping("updatestudent")
